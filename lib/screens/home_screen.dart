@@ -44,27 +44,6 @@ class HomeScreen extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.teal, Colors.greenAccent],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(20),
-            ),
-          ),
-        ),
-        title: Text(
-          'Solde Principal',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        centerTitle: true,
-        toolbarHeight: 80,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
