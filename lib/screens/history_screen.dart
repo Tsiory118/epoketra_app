@@ -20,7 +20,7 @@ class HistoryScreen extends ConsumerWidget {
 
   // ✅ Formater le mois
   String formatMonth(DateTime date) {
-    return DateFormat('MMMM yyyy').format(date); // Ex: janvier 2026
+    return DateFormat('MMMM yyyy').format(date); // Ex: January 2026
   }
 
   @override
@@ -69,15 +69,61 @@ class HistoryScreen extends ConsumerWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 🔹 En-tête du mois
+                    // 🔹 En-tête du mois avec icône supprimer
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        month,
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            month,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            tooltip: 'Supprimer l\'historique du mois',
+                            onPressed: () {
+                              // 🔥 Confirmer avant suppression
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text('Confirmer la suppression'),
+                                  content: Text(
+                                      'Voulez-vous vraiment supprimer toutes les transactions de $month ?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context),
+                                      child: const Text('Annuler'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Supprimer toutes les transactions de ce mois
+                                        final monthTransactions =
+                                            grouped[month]!;
+                                        for (var tx
+                                            in monthTransactions) {
+                                          ref
+                                              .read(transactionsProvider
+                                                  .notifier)
+                                              .removeTransaction(tx.id);
+                                        }
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red),
+                                      child: const Text('Supprimer'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
+
                     // 🔹 Transactions de ce mois
                     ...monthTransactions.map((tx) {
                       final bool isRevenue = tx.type == TransactionType.revenu;
