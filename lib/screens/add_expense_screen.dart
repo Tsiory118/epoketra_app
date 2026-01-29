@@ -101,7 +101,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               Text(
                 _errorText!,
                 style: const TextStyle(
-                    color: Colors.red, fontWeight: FontWeight.bold),
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             const SizedBox(height: 20),
 
@@ -118,7 +120,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                   ),
                   elevation: 5,
                   textStyle: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 child: const Text(
                   'Ajouter Dépense',

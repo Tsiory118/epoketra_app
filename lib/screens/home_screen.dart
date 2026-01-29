@@ -8,7 +8,7 @@ import 'history_screen.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  // ✅ Fonction de lisibilité du solde
+  // ✅ Formate le solde pour le tableau principal
   String formatSolde(double value) {
     if (value >= 1000000) {
       return '${(value / 1000000).toStringAsFixed(3)} M';
@@ -22,6 +22,16 @@ class HomeScreen extends ConsumerWidget {
     } else {
       return value.toStringAsFixed(0);
     }
+  }
+
+  // ✅ Formate le solde pour l’icône voir (séparateurs de milliers, complet)
+  String formatSoldeComplet(double value) {
+    return value
+        .toStringAsFixed(0)
+        .replaceAllMapped(
+          RegExp(r'\B(?=(\d{3})+(?!\d))'),
+          (match) => ' ',
+        );
   }
 
   @override
@@ -64,6 +74,26 @@ class HomeScreen extends ConsumerWidget {
       );
     }
 
+    // 👁 Voir le solde total complet
+    void viewTotalSolde() {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Solde Total'),
+          content: Text(
+            '${formatSoldeComplet(solde)} MGA',
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Fermer'),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: Padding(
@@ -81,6 +111,7 @@ class HomeScreen extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Solde affiché principal (compact)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -102,11 +133,22 @@ class HomeScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.edit, size: 28),
-                      color: Colors.teal,
-                      tooltip: 'Modifier le solde',
-                      onPressed: editSolde,
+                    // 👈 Deux icônes à droite
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 28),
+                          color: Colors.teal,
+                          tooltip: 'Modifier le solde',
+                          onPressed: editSolde,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.remove_red_eye, size: 28),
+                          color: Colors.teal,
+                          tooltip: 'Voir le solde total',
+                          onPressed: viewTotalSolde,
+                        ),
+                      ],
                     ),
                   ],
                 ),

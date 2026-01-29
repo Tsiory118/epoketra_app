@@ -12,7 +12,7 @@ class HistoryScreen extends ConsumerWidget {
     if (montant >= 1000000) {
       return '${(montant / 1000000).toStringAsFixed(3)} M MGA';
     } else if (montant >= 1000) {
-      return '${(montant / 1000).toStringAsFixed(0)} k MGA';
+      return '${montant.toStringAsFixed(0).replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ' ')} MGA';
     } else {
       return '${montant.toStringAsFixed(0)} MGA';
     }
