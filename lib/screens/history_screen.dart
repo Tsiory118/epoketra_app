@@ -93,26 +93,28 @@ class HistoryScreen extends ConsumerWidget {
                                       'Voulez-vous vraiment supprimer toutes les transactions de $month ?'),
                                   actions: [
                                     TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context),
-                                      child: const Text('Annuler'),
+                                      onPressed: () => Navigator.pop(context),
+                                      style: TextButton.styleFrom(
+                                        backgroundColor: Colors.grey[700],
+                                      ),
+                                      child: const Text(
+                                        'Annuler',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
                                         // Supprimer toutes les transactions de ce mois
-                                        final monthTransactions =
-                                            grouped[month]!;
-                                        for (var tx
-                                            in monthTransactions) {
-                                          ref
-                                              .read(transactionsProvider
-                                                  .notifier)
-                                              .removeTransaction(tx.id);
+                                        final monthTransactions = grouped[month]!;
+                                        for (var tx in monthTransactions) {
+                                          ref.read(transactionsProvider.notifier).removeTransaction(tx.id);
                                         }
                                         Navigator.pop(context);
                                       },
                                       style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red),
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                      ),
                                       child: const Text('Supprimer'),
                                     ),
                                   ],
