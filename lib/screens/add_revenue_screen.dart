@@ -30,12 +30,12 @@ class _AddRevenueScreenState extends ConsumerState<AddRevenueScreen> {
 
     // Ajouter dans l'historique
     ref.read(transactionsProvider.notifier).addTransaction(TransactionModel(
-      id: DateTime.now().millisecondsSinceEpoch,
-      montant: montant,
-      motif: motif,
-      date: DateTime.now(),
-      type: TransactionType.revenu,
-    ));
+          id: DateTime.now().millisecondsSinceEpoch,
+          montant: montant,
+          motif: motif,
+          date: DateTime.now(),
+          type: TransactionType.revenu,
+        ));
 
     Navigator.pop(context);
   }
@@ -101,7 +101,7 @@ class _AddRevenueScreenState extends ConsumerState<AddRevenueScreen> {
               ),
             SizedBox(height: 20),
 
-            // Bouton Ajouter
+            // Bouton Ajouter amélioré
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -112,9 +112,19 @@ class _AddRevenueScreenState extends ConsumerState<AddRevenueScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  elevation: 5, // léger relief
+                  textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                child: Text('Ajouter Revenu'),
+                child: Text(
+                  'Ajouter Revenu',
+                  style: TextStyle(
+                    color: Colors.white, // <-- texte blanc lisible
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],

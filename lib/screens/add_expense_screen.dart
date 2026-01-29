@@ -30,12 +30,12 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
 
     // Ajouter la transaction
     ref.read(transactionsProvider.notifier).addTransaction(TransactionModel(
-      id: DateTime.now().millisecondsSinceEpoch,
-      montant: montant,
-      motif: motif,
-      date: DateTime.now(),
-      type: TransactionType.depense,
-    ));
+          id: DateTime.now().millisecondsSinceEpoch,
+          montant: montant,
+          motif: motif,
+          date: DateTime.now(),
+          type: TransactionType.depense,
+        ));
 
     Navigator.pop(context);
   }
@@ -101,7 +101,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               ),
             SizedBox(height: 20),
 
-            // Bouton ajouter
+            // Bouton Ajouter amélioré
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -112,9 +112,19 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  elevation: 5, // léger relief
+                  textStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                child: Text('Ajouter Dépense'),
+                child: Text(
+                  'Ajouter Dépense',
+                  style: TextStyle(
+                    color: Colors.white, // <-- texte blanc lisible
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ],
