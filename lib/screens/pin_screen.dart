@@ -55,7 +55,7 @@ class _PinScreenState extends State<PinScreen> {
             children: [
               // Titre
               Text(
-                'Bienvenue',
+                'E - POKETRA',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
