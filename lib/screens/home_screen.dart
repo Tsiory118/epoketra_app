@@ -6,37 +6,58 @@ import 'add_expense_screen.dart';
 import 'history_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  // ✅ Fonction de lisibilité du solde
+  String formatSolde(double value) {
+    if (value >= 1000000) {
+      return '${(value / 1000000).toStringAsFixed(3)} M';
+    } else if (value >= 1000) {
+      return value
+          .toStringAsFixed(0)
+          .replaceAllMapped(
+            RegExp(r'\B(?=(\d{3})+(?!\d))'),
+            (match) => ' ',
+          );
+    } else {
+      return value.toStringAsFixed(0);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double solde = ref.watch(soldeProvider);
+    final double solde = ref.watch(soldeProvider);
 
-    // Fonction pour modifier le solde manuellement
-    void _editSolde() {
-      final _controller = TextEditingController(text: solde.toStringAsFixed(0));
+    // 🔒 Modifier le solde manuellement
+    void editSolde() {
+      final controller =
+          TextEditingController(text: solde.toStringAsFixed(0));
 
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Modifier le solde'),
+        builder: (_) => AlertDialog(
+          title: const Text('Modifier le solde'),
           content: TextField(
-            controller: _controller,
+            controller: controller,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Nouveau solde en MGA'),
+            decoration: const InputDecoration(
+              labelText: 'Nouveau solde (MGA)',
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Annuler'),
+              child: const Text('Annuler'),
             ),
             ElevatedButton(
               onPressed: () {
-                final value = double.tryParse(_controller.text);
+                final value = double.tryParse(controller.text);
                 if (value != null) {
                   ref.read(soldeProvider.notifier).setSolde(value);
                   Navigator.pop(context);
                 }
               },
-              child: Text('Valider'),
+              child: const Text('Valider'),
             ),
           ],
         ),
@@ -44,20 +65,19 @@ class HomeScreen extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Carte du solde avec bouton modifier
+            // 🔹 Carte du solde
             Card(
-              elevation: 5,
+              elevation: 6,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
-              color: Colors.white,
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -65,17 +85,16 @@ class HomeScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Solde Actuel',
+                          'Solde actuel',
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
                             color: Colors.grey[700],
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
-                          '${solde.toStringAsFixed(0)} MGA',
-                          style: TextStyle(
+                          '${formatSolde(solde)} MGA',
+                          style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: Colors.teal,
@@ -84,19 +103,23 @@ class HomeScreen extends ConsumerWidget {
                       ],
                     ),
                     IconButton(
-                      icon: Icon(Icons.edit, color: Colors.teal, size: 28),
-                      onPressed: _editSolde,
+                      icon: const Icon(Icons.edit, size: 28),
+                      color: Colors.teal,
                       tooltip: 'Modifier le solde',
+                      onPressed: editSolde,
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 30),
-            // Boutons sous forme de cartes
+
+            const SizedBox(height: 30),
+
+            // 🔹 Actions
             Expanded(
               child: GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
                   mainAxisSpacing: 20,
                   childAspectRatio: 3.5,
@@ -108,7 +131,8 @@ class HomeScreen extends ConsumerWidget {
                     icon: Icons.arrow_circle_up,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => AddRevenueScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => AddRevenueScreen()),
                     ),
                   ),
                   _ActionCard(
@@ -117,16 +141,18 @@ class HomeScreen extends ConsumerWidget {
                     icon: Icons.arrow_circle_down,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => AddExpenseScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => AddExpenseScreen()),
                     ),
                   ),
                   _ActionCard(
-                    title: 'Historique Mensuel',
+                    title: 'Historique mensuel',
                     color: Colors.blue,
                     icon: Icons.history,
                     onTap: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => HistoryScreen()),
+                      MaterialPageRoute(
+                          builder: (_) => HistoryScreen()),
                     ),
                   ),
                 ],
@@ -156,18 +182,18 @@ class _ActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             gradient: LinearGradient(
               colors: [color.withOpacity(0.7), color],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
             ),
           ),
           child: Row(
@@ -175,13 +201,13 @@ class _ActionCard extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Icon(icon, color: Colors.white, size: 30),
+              Icon(icon, color: Colors.white, size: 32),
             ],
           ),
         ),

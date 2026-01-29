@@ -5,18 +5,21 @@ import '../providers/transactions_provider.dart';
 import '../models/transaction.dart';
 
 class AddExpenseScreen extends ConsumerStatefulWidget {
+  const AddExpenseScreen({super.key});
+
   @override
   _AddExpenseScreenState createState() => _AddExpenseScreenState();
 }
 
 class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
-  final _montantController = TextEditingController();
-  final _motifController = TextEditingController();
+  final TextEditingController _montantController = TextEditingController();
+  final TextEditingController _motifController = TextEditingController();
   String? _errorText;
 
+  // ✅ Ajouter une dépense
   void addExpense() {
-    final montant = double.tryParse(_montantController.text);
-    final motif = _motifController.text.trim();
+    final double? montant = double.tryParse(_montantController.text);
+    final String motif = _motifController.text.trim();
 
     if (montant == null || montant <= 0 || motif.isEmpty) {
       setState(() {
@@ -25,10 +28,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       return;
     }
 
-    // Supprimer le montant du solde
+    // 🟥 Soustraire du solde
     ref.read(soldeProvider.notifier).removeMontant(montant);
 
-    // Ajouter la transaction
+    // ➕ Ajouter la transaction
     ref.read(transactionsProvider.notifier).addTransaction(TransactionModel(
           id: DateTime.now().millisecondsSinceEpoch,
           montant: montant,
@@ -37,7 +40,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
           type: TransactionType.depense,
         ));
 
-    Navigator.pop(context);
+    Navigator.pop(context); // Retour à l'accueil
   }
 
   @override
@@ -52,15 +55,15 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: Text('Ajouter Dépense'),
+        title: const Text('Ajouter Dépense'),
         backgroundColor: Colors.redAccent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Montant
+            // 🔹 Montant
             TextField(
               controller: _montantController,
               keyboardType: TextInputType.number,
@@ -68,60 +71,59 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                 labelText: 'Montant',
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: Icon(Icons.money_off),
+                prefixIcon: const Icon(Icons.money_off),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            // Motif
+            // 🔹 Motif
             TextField(
               controller: _motifController,
               decoration: InputDecoration(
                 labelText: 'Motif',
                 filled: true,
                 fillColor: Colors.white,
-                prefixIcon: Icon(Icons.note),
+                prefixIcon: const Icon(Icons.note),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            // Message d'erreur
+            // 🔹 Message d'erreur
             if (_errorText != null)
               Text(
                 _errorText!,
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.red, fontWeight: FontWeight.bold),
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            // Bouton Ajouter amélioré
+            // 🔹 Bouton Ajouter
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: addExpense,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,
-                  padding: EdgeInsets.symmetric(vertical: 18),
+                  padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  elevation: 5, // léger relief
-                  textStyle: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  elevation: 5,
+                  textStyle: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                child: Text(
+                child: const Text(
                   'Ajouter Dépense',
                   style: TextStyle(
-                    color: Colors.white, // <-- texte blanc lisible
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
