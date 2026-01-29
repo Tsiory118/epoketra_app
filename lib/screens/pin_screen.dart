@@ -85,7 +85,7 @@ class _PinScreenState extends State<PinScreen> {
                   prefixIcon: Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePin ? Icons.visibility : Icons.visibility_off,
+                      _obscurePin ? Icons.visibility_off : Icons.visibility, // inversé
                     ),
                     onPressed: () {
                       setState(() {
